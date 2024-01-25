@@ -21,9 +21,13 @@
  *  0  => true
  *  -5 => false
  */
-function isPositive(/* number */) {
-  throw new Error('Not implemented');
+function isPositive(number) {
+  if (number >= 0) {
+    return true;
+  }
+  return false;
 }
+isPositive(5);
 
 /**
  * Returns the maximum of three numbers without using Array and Math classes methods.
@@ -60,10 +64,14 @@ function getMaxNumber(/* a, b, c */) {
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  * {x: 1, y: 1}, {x: 2, y: 8} => false
  */
-function canQueenCaptureKing(/* queen, king */) {
-  throw new Error('Not implemented');
+function canQueenCaptureKing(queen, king) {
+  return (
+    queen.x === king.x ||
+    queen.y === king.y ||
+    Math.abs(queen.x - king.x) === Math.abs(queen.y - king.y)
+  );
 }
-
+canQueenCaptureKing({ x: 1, y: 1 }, { x: 5, y: 5 });
 /**
  * Determines whether a triangle is isosceles based on its side lengths.
  * In this task, the use of methods of the String and Array classes is not allowed.
@@ -82,9 +90,10 @@ function canQueenCaptureKing(/* queen, king */) {
  *  2, 2, 5   => false
  *  3, 0, 3   => false
  */
-function isIsoscelesTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isIsoscelesTriangle(a, b, c) {
+  return a + b > c && a + c > b && b + c > a && (a === b || b === c || a === c);
 }
+isIsoscelesTriangle(1, 2, 3);
 
 /**
  * Converts a number to Roman numerals. The number will be between 1 and 39.
@@ -135,9 +144,21 @@ function convertNumberToString(/* numberStr */) {
  *  '0123210'   => true
  *  'qweqwe'    => false
  */
-function isPalindrome(/* str */) {
-  throw new Error('Not implemented');
+function isPalindrome(str) {
+  const re = /[^A-Za-z0-9]/g;
+  let str1 = str;
+  str1 = str.toLowerCase().replace(re, '');
+
+  const len = str1.length;
+
+  for (let i = 0; i < len / 2; i += 1) {
+    if (str[i] !== str[len - 1 - i]) {
+      return false;
+    }
+  }
+  return true;
 }
+isPalindrome('ala');
 
 /**
  * Finds the first occurrence of a letter in a string.
@@ -172,9 +193,25 @@ function getIndexOf(/* str, letter */) {
  *  12345, 0    => false
  *  12345, 6    => false
  */
-function isContainNumber(/* num, digit */) {
-  throw new Error('Not implemented');
+function isContainNumber(num1, digit) {
+  let num = num1;
+  if (digit < 0 || digit > 9) {
+    return false;
+  }
+
+  while (num !== 0) {
+    const currentDigit = num % 10;
+
+    if (currentDigit === digit) {
+      return true;
+    }
+
+    num = Math.floor(num / 10);
+  }
+
+  return false;
 }
+isContainNumber(12345, 5);
 
 /**
  * Finds the index of an element in an array where the sum of elements to the left equals the sum of elements to the right.
@@ -272,10 +309,32 @@ function sortByAsc(/* arr */) {
  *  '012345', 3 => '024135' => '043215' => '031425'
  *  'qwerty', 3 => 'qetwry' => 'qtrewy' => 'qrwtey'
  */
-function shuffleChar(/* str, iterations */) {
-  throw new Error('Not implemented');
-}
+function shuffleChar(str, iterations) {
+  let str1 = str;
+  const strLength = str1.length;
+  const result = new Array(strLength);
 
+  for (let iter = 0; iter < iterations; iter += 1) {
+    for (let i = 0, j = 0; i < strLength; i += 2, j += 1) {
+      result[j] = str1[i];
+    }
+
+    for (
+      let i = 1, j = strLength - (strLength % 2);
+      i < strLength;
+      i += 2, j += 1
+    ) {
+      result[j] = str[i];
+    }
+
+    for (let i = 0; i < strLength; i += 1) {
+      str1 = result[i];
+    }
+  }
+
+  return result.join('');
+}
+shuffleChar('012345', 1);
 /**
  * Returns the nearest largest integer consisting of the digits of the given positive integer.
  * If there is no such number, it returns the original number.
