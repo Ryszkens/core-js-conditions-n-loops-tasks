@@ -42,9 +42,15 @@ isPositive(5);
  *  -5, 0, 5      => 5
  *  -0.1, 0, 0.2  => 0.2
  */
-function getMaxNumber(/* a, b, c */) {
-  throw new Error('Not implemented');
+function getMaxNumber(a, b, c) {
+  if (a >= b && a >= c) {
+    return a;
+  }
+  if (b >= a && b >= c) return b;
+
+  return c;
 }
+getMaxNumber(1, 2, 3);
 
 /**
  * Checks if a queen can capture a king in the next move on an 8x8 chessboard.
@@ -109,12 +115,46 @@ isIsoscelesTriangle(1, 2, 3);
  *  10  => X
  *  26  => XXVI
  */
-function convertToRomanNumerals(/* num */) {
+function convertToRomanNumerals(/* num1 */) {
+  // const arr = [
+  //   { 1: 'I' },
+  //   { 2: 'II' },
+  //   { 3: 'III' },
+  //   { 4: 'IV' },
+  //   { 5: 'V' },
+  //   { 6: 'VI' },
+  //   { 7: 'VII' },
+  //   { 8: 'VIII' },
+  //   { 9: 'IX' },
+  // ];
+  // const num = num1;
+  // let result = '';
+  // let res = '';
+  // if (num > 10) {
+  //   result += 'X';
+  //   res = num - 10;
+  //   for (let i = 0; i <= arr.length, i+=1) {
+  //     let nums = arr[res-1];
+  //   }
+  // }
+  // if (num > 20 && num < 30) {
+  //   result += 'XX';
+  //   res = num - 20;
+  //   for (let i = 0; i <= arr.length, i++) {
+  //     let nums = arr[res-1];
+  // }}
+  // if (num > 30) {
+  //   result += 'XXX';
+  //   res = num - 30;
+  //   for (let i = 0; i <= arr.length, i++) {
+  //     let nums = arr[res-1];
+  // }
+  // return result + nums;
   throw new Error('Not implemented');
 }
 
 /**
- * Converts a number to a string, replacing digits with words.
+ * a
  * In this task, the use of methods of the String and Array classes is not allowed.
  *
  * @param {string} numberStr - The number as a string.
@@ -128,9 +168,66 @@ function convertToRomanNumerals(/* num */) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
+function convertNumberToString(numberStr) {
+  function digitToWord(digit) {
+    switch (digit) {
+      case '0':
+        return 'zero';
+      case '1':
+        return 'one';
+      case '2':
+        return 'two';
+      case '3':
+        return 'three';
+      case '4':
+        return 'four';
+      case '5':
+        return 'five';
+      case '6':
+        return 'six';
+      case '7':
+        return 'seven';
+      case '8':
+        return 'eight';
+      case '9':
+        return 'nine';
+      default:
+        return '';
+    }
+  }
+
+  let result = '';
+  let isDecimalPoint = false;
+
+  for (let i = 0; i < numberStr.length; i += 1) {
+    const char = numberStr[i];
+
+    if (char === '-') {
+      result += 'minus ';
+    } else if (char === '.') {
+      isDecimalPoint = true;
+      result += 'point ';
+    } else {
+      result += `${digitToWord(char)} + ' '`;
+    }
+  }
+
+  // Remove trailing space
+  result = result.trim();
+
+  // Handle special case for zero
+  if (result === 'zero') {
+    return result;
+  }
+
+  // Remove trailing 'point' if there is no fractional part
+  if (!isDecimalPoint) {
+    result = result.replace(' point', '');
+  }
+
+  return result;
 }
+convertNumberToString('1,7');
 
 /**
  * Determines whether a string is a palindrome.
@@ -145,11 +242,7 @@ function convertNumberToString(/* numberStr */) {
  *  'qweqwe'    => false
  */
 function isPalindrome(str) {
-  const re = /[^A-Za-z0-9]/g;
-  let str1 = str;
-  str1 = str.toLowerCase().replace(re, '');
-
-  const len = str1.length;
+  const len = str.length;
 
   for (let i = 0; i < len / 2; i += 1) {
     if (str[i] !== str[len - 1 - i]) {
@@ -158,7 +251,8 @@ function isPalindrome(str) {
   }
   return true;
 }
-isPalindrome('ala');
+
+isPalindrome('qweewq');
 
 /**
  * Finds the first occurrence of a letter in a string.
@@ -352,9 +446,53 @@ shuffleChar('012345', 1);
  * @param {number} number The source number
  * @returns {number} The nearest larger number, or original number if none exists.
  */
-function getNearestBigger(/* number */) {
-  throw new Error('Not implemented');
+function getNearestBigger(num2) {
+  const num = num2;
+  if (num < 10) {
+    return num;
+  }
+
+  const digits = [];
+  let tempNum = num;
+  while (tempNum > 0) {
+    digits.unshift(tempNum % 10);
+    tempNum = Math.floor(tempNum / 10);
+  }
+
+  let i = digits.length - 2;
+  while (i >= 0 && digits[i] >= digits[i + 1]) {
+    i -= 1;
+  }
+
+  if (i < 0) {
+    return num;
+  }
+
+  let j = digits.length - 1;
+  while (digits[j] <= digits[i]) {
+    j -= 1;
+  }
+
+  let temp = digits[i];
+  digits[i] = digits[j];
+  digits[j] = temp;
+
+  let left = i + 1;
+  let right = digits.length - 1;
+  while (left < right) {
+    temp = digits[left];
+    digits[left] = digits[right];
+    digits[right] = temp;
+    left += 1;
+    right -= 1;
+  }
+
+  const result = digits.reduce((acc, digit) => acc * 10 + digit, 0);
+
+  return result;
 }
+
+getNearestBigger(12345);
 
 module.exports = {
   isPositive,
